@@ -8,7 +8,7 @@ Descripción:
     de código. Proporciona un informe con el conteo de las lineas de codigo fisicas y logicas.
 """
 
-import LOC_Modificado as LOC
+import Analizador_De_Codigo as LOC
 
 def main():
     print("Bienvenido al analizador de códigos.\n")
