@@ -1,74 +1,80 @@
+"""
+Analizador de líneas de código en Python.
+
+Esta Modulo analiza un archivo fuente en Python y cuenta:
+- Líneas físicas: excluye comentarios y líneas en blanco.
+- Líneas lógicas: bloques lógicos como clases, funciones, etc.
+"""
+
 class AnalizadorDeCodigo:
     """
-        Analiza el archivo línea por línea para contar las líneas físicas, 
-        lógicas y de comentarios.
+    Clase para analizar archivos Python y contar líneas físicas y lógicas.
 
-        Lee el archivo especificado en file_path y realiza el conteo de:
-        - Líneas Físicas (aquellas que no son comentarios ni líneas vacías).
-        - Líneas de código lógicas.
+    Attributes:
+        ruta_del_archivo (str): Ruta del archivo a analizar.
+        lineas_fisicas (int): Contador de líneas físicas.
+        lineas_logicas (int): Contador de líneas lógicas.
     """
 
     def __init__(self, ruta_del_archivo):
+        """
+        Inicializa el analizador con la ruta del archivo.
+
+        Args:
+            ruta_del_archivo (str): Ruta del archivo a analizar.
+        """
         self.ruta_del_archivo = ruta_del_archivo
         self.lineas_fisicas = 0
         self.lineas_logicas = 0
-
-        # Lista de palabras clave que inician bloques lógicos
-        self.palabras_clave_logicas = [
-            'if', 'elif', 'for', 'while', 'def',
-            'class', 'try', 'except', 'with'
-        ]
+        self.palabras_clave_logicas = ['if', 'for', 'while', 'def', 'class', 'try', 'with']
 
     def analizar_archivo(self):
+        """
+        Analiza un archivo fuente para contar líneas físicas y lógicas.
+
+        Procesa línea por línea el archivo especificado, ignorando comentarios
+        y líneas en blanco. Los comentarios en bloque también se excluyen.
+
+        Returns:
+            nada
+        Excepciones:
+            FileNotFoundError: Si el archivo no existe.
+            IOError: Si hay un problema al leer el archivo.
+        """
         comentario_bloque = False
 
-        with open(self.ruta_del_archivo, 'r', encoding='utf-8') as archivo:
-            for linea in archivo:
-                linea_sin_espacios = linea.strip()
+        try:
+            with open(self.ruta_del_archivo, 'r', encoding='utf-8') as archivo:
+                for linea in archivo:
+                    linea_sin_espacios = linea.strip()
 
-                """
-                Manejo de comentarios en bloque ignora comentarios en bloque si estos estan en cualquier 
-                parte del archivo o si estan en una misma linea.
-                """
-
-                if '"""' in linea_sin_espacios or "'''" in linea_sin_espacios:
-                    # Si el bloque de comentarios empieza y termina en la misma línea, lo ignoramos.
-                    if linea_sin_espacios.count('"""') == 2 or linea_sin_espacios.count("'''") == 2:
+                    # Manejo de comentarios en bloque
+                    if '"""' in linea_sin_espacios or "'''" in linea_sin_espacios:
+                        if linea_sin_espacios.count('"""') == 2 or linea_sin_espacios.count("'''") == 2:
+                            continue
+                        comentario_bloque = not comentario_bloque
                         continue
-                    # Si ya estamos dentro de un bloque de comentarios, marcamos que terminó el bloque.
-                    if comentario_bloque:
-                        comentario_bloque = False
+                    # Manejo de lineas en blanco y comentarios normales
+                    if comentario_bloque or not linea_sin_espacios or linea_sin_espacios.startswith('#'):
                         continue
-                    # Si encontramos el inicio de un bloque de comentarios, marcamos que estamos dentro del bloque.
-                    comentario_bloque = True
-                    continue
 
-                # decidimos si ignorar o no lo procecesado. si es True se salta la linea y no se cuenta.
-                if comentario_bloque:
-                    continue
+                    self.lineas_fisicas += 1
 
-                # Ignorar líneas en blanco
-                if not linea_sin_espacios:
-                    continue
+                    primera_palabra = linea_sin_espacios.split()[0]
+                    if primera_palabra.rstrip(':') in self.palabras_clave_logicas:
+                        self.lineas_logicas += 1
 
-                # Ignorar líneas que son comentarios
-                if linea_sin_espacios.startswith('#'):
-                    continue
-
-                # Contar líneas físicas
-                self.lineas_fisicas += 1
-
-                # Contar líneas lógicas solo si están definidas en las palabras clave
-                primera_palabra = linea_sin_espacios.split()[0]
-                if primera_palabra.rstrip(':') in self.palabras_clave_logicas:
-                    self.lineas_logicas += 1
+        except FileNotFoundError:
+            print(f"Error: El archivo {self.ruta_del_archivo} no existe.")
+        except IOError as e:
+            print(f"Error al leer el archivo {self.ruta_del_archivo}: {e}")
 
     def informe(self):
         """
-        Imprime un resumen del análisis realizado sobre el archivo de código.
+        Retorna un resumen tabular del análisis del archivo.
 
-        Muestra el número de líneas físicas excluyendo comentarios y espacios en blanco.
-        El número de líneas de código lógicas.
+        Retorna:
+            El conteo de las lineas de codigo físicas y lógicas.
         """
         print("-" * 60)
         print(f"{'\nPrograma \t\t':<10} | {'LOC Lógicas':<11} \t | {'LOC Físicas':<11}")
@@ -76,8 +82,8 @@ class AnalizadorDeCodigo:
 
 
 if __name__ == "__main__":
-    # Para pruebas con un solo archivo. Si son varios, usa AutoTest.py
     ruta_del_archivo = './pruebas/Prueba_A.py'
     analizador = AnalizadorDeCodigo(ruta_del_archivo)
     analizador.analizar_archivo()
     analizador.informe()
+
