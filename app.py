@@ -1,6 +1,6 @@
 """
 Programa: Analizador de Líneas de Código
-Autor: Angel Mariel Osalde Salazar
+Autor: Equipo 6
 Fecha: 10 de noviembre del 2024
 Descripción:
     Este programa solicita al usuario la ruta de una carpeta, busca todos los archivos Python
@@ -12,9 +12,10 @@ import Analizador_De_Codigo as LOC
 
 def main():
     print("Bienvenido al analizador de códigos.\n")
-    print("porfavor, Asegurese de haber anexado sus archivos a la carpeta de nombre analizador \
-          para poder procesar sus archivos ")
-    print("Escribe los nombres de los archivos a analizar, separados por comas.")
+    print("porfavor, Asegurese de haber anexado sus archivos a la carpeta\
+           de nombre analizador para poder procesar sus archivos ")
+    print("Escribe los nombres de los archivos \
+          a analizar,separados por comas.")
     print("Ejemplo: Archivo_ABC.py, Archivo_XYZ.py")
     
     # Leer la entrada del usuario
@@ -31,7 +32,8 @@ def main():
             analyzer.analizar_archivo()
             analyzer.informe()
         except FileNotFoundError:
-            print(f"Error: El archivo {archivo} no se encontró en la carpeta ./pruebas/")
+            print(f"Error: El archivo {archivo} no se encontró en la carpeta\
+                   ./pruebas/")
         except Exception as e:
             print(f"Error al procesar el archivo {archivo}: {e}")
     
