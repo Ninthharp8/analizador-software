@@ -7,6 +7,7 @@ Esta Modulo analiza un archivo fuente en Python y cuenta:
 """
 
 class AnalizadorDeCodigo:
+
     """
     Clase para analizar archivos Python y contar líneas físicas y lógicas.
 
@@ -26,9 +27,10 @@ class AnalizadorDeCodigo:
         self.ruta_del_archivo = ruta_del_archivo
         self.lineas_fisicas = 0
         self.lineas_logicas = 0
-        self.palabras_clave_logicas = ['if', 'for', 'while', 'def', 'class', 'try', 'with']
+        self.palabras_clave_logicas = ['if','for','while','def','class','try','with']
 
     def analizar_archivo(self):
+
         """
         Analiza un archivo fuente para contar líneas físicas y lógicas.
 
@@ -42,7 +44,6 @@ class AnalizadorDeCodigo:
             IOError: Si hay un problema al leer el archivo.
         """
         comentario_bloque = False
-
         try:
             with open(self.ruta_del_archivo, 'r', encoding='utf-8') as archivo:
                 for linea in archivo:
@@ -68,8 +69,12 @@ class AnalizadorDeCodigo:
             print(f"Error: El archivo {self.ruta_del_archivo} no existe.")
         except IOError as e:
             print(f"Error al leer el archivo {self.ruta_del_archivo}: {e}")
+        except UnicodeDecodeError:
+            print(f"Error: El archivo {self.ruta_del_archivo} no es un \
+                  archivo de texto válido.")
 
     def informe(self):
+
         """
         Retorna un resumen tabular del análisis del archivo.
 
@@ -77,12 +82,12 @@ class AnalizadorDeCodigo:
             El conteo de las lineas de codigo físicas y lógicas.
         """
         print("-" * 60)
-        print(f"{'\nPrograma \t\t':<10} | {'LOC Lógicas':<11} \t | {'LOC Físicas':<11}")
-        print(f"{self.ruta_del_archivo:<10} \t | {self.lineas_logicas:<11}\t | {self.lineas_fisicas:<11}\n")
+        print(f"{'Programa':<30} | {'LOC Lógicas':<11} | {'LOC Físicas':<11}")
+        print(f"{self.ruta_del_archivo:<30} | {self.lineas_logicas:<11} | {self.lineas_fisicas:<11}")
 
 
 if __name__ == "__main__":
-    ruta_del_archivo = './pruebas/Prueba_A.py'
+    ruta_del_archivo = './pruebas/Prueba_M.py'
     analizador = AnalizadorDeCodigo(ruta_del_archivo)
     analizador.analizar_archivo()
     analizador.informe()
