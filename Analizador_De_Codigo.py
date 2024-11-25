@@ -27,7 +27,8 @@ class AnalizadorDeCodigo:
         self.ruta_del_archivo = ruta_del_archivo
         self.lineas_fisicas = 0
         self.lineas_logicas = 0
-        self.palabras_clave_logicas = ['if','for','while','def','class','try','with']
+        self.palabras_clave_logicas = ['if','for','while',
+                                       'def','class','try','with']
 
     def analizar_archivo(self):
 
@@ -51,18 +52,21 @@ class AnalizadorDeCodigo:
 
                     # Manejo de comentarios en bloque
                     if '"""' in linea_sin_espacios or "'''" in linea_sin_espacios:
-                        if linea_sin_espacios.count('"""') == 2 or linea_sin_espacios.count("'''") == 2:
+                        if linea_sin_espacios.count('"""') == 2 \
+                            or linea_sin_espacios.count("'''") == 2:
                             continue
                         comentario_bloque = not comentario_bloque
                         continue
                     # Manejo de lineas en blanco y comentarios normales
-                    if comentario_bloque or not linea_sin_espacios or linea_sin_espacios.startswith('#'):
+                    if comentario_bloque or not linea_sin_espacios \
+                        or linea_sin_espacios.startswith('#'):
                         continue
 
                     self.lineas_fisicas += 1
 
                     primera_palabra = linea_sin_espacios.split()[0]
-                    if primera_palabra.rstrip(':') in self.palabras_clave_logicas:
+                    if primera_palabra.rstrip(':') \
+                        in self.palabras_clave_logicas:
                         self.lineas_logicas += 1
 
         except FileNotFoundError:
@@ -83,7 +87,8 @@ class AnalizadorDeCodigo:
         """
         print("-" * 60)
         print(f"{'Programa':<30} | {'LOC Lógicas':<11} | {'LOC Físicas':<11}")
-        print(f"{self.ruta_del_archivo:<30} | {self.lineas_logicas:<11} | {self.lineas_fisicas:<11}")
+        print(f"{self.ruta_del_archivo:<30} | {\
+            self.lineas_logicas:<11} | {self.lineas_fisicas:<11}")
 
 
 if __name__ == "__main__":
