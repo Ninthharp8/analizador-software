@@ -28,8 +28,10 @@ class AnalizadorDeCodigo:
         self.lineas_logicas = 0
         self.palabras_clave_logicas = ['if', 'for', 'while', 
                                        'def', 'class', 'try', 'with']
-        self.error = False  # Indicador de error
-        self.error_mensaje = ""  # Mensaje de error
+        # Indicador de error
+        self.error = False  
+        # Mensaje de error
+        self.error_mensaje = ""  
 
     def analizar_archivo(self):
         """
@@ -96,4 +98,3 @@ if __name__ == "__main__":
     analizador = AnalizadorDeCodigo(ruta_del_archivo)
     analizador.analizar_archivo()
     analizador.informe()
-
